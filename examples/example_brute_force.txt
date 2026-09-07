@@ -1,0 +1,27 @@
+WINDOWS SECURITY LOG ANALYZER
+============================================================
+
+SUMMARY
+------------------------------------------------------------
+Successful Logins : 42
+Failed Logins     : 7
+Logoffs           : 12
+Interactive       : 15
+RDP Logins        : 2
+Network Logins    : 18
+Service Logins    : 7
+Other Logins      : 0
+
+SECURITY ALERTS
+------------------------------------------------------------
+
+POSSIBLE BRUTE FORCE
+
+User     : testuser
+IP       : 192.0.2.10
+Attempts : 6
+Window   : 5 minutes
+Risk     : HIGH
+
+NOTE:
+This is a synthetic example created for demonstration purposes.

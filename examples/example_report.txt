@@ -1,0 +1,40 @@
+WINDOWS SECURITY LOG ANALYZER
+============================================================
+
+CONFIGURATION
+------------------------------------------------------------
+Time Range        : Last 24 hours
+Threshold         : 5 failed attempts
+Detection Window  : 5 minutes
+
+SUMMARY
+------------------------------------------------------------
+Successful Logins : 42
+Failed Logins     : 8
+Logoffs           : 12
+Interactive       : 8
+RDP Logins        : 4
+Network Logins    : 15
+Service Logins    : 15
+Other Logins      : 0
+
+SECURITY ALERTS
+------------------------------------------------------------
+
+POSSIBLE BRUTE FORCE
+User     : testuser
+IP       : 192.168.1.100
+Attempts : 5
+Window   : 5 minutes
+Risk     : HIGH
+First    : 2026-09-05 14:10:01
+Last     : 2026-09-05 14:13:42
+
+RECENT EVENTS
+------------------------------------------------------------
+2026-09-05 14:15:01 | Event 4624 | Successful Login | User: testuser | IP: 192.168.1.100
+2026-09-05 14:13:42 | Event 4625 | Failed Login | User: testuser | IP: 192.168.1.100
+2026-09-05 14:12:30 | Event 4625 | Failed Login | User: testuser | IP: 192.168.1.100
+2026-09-05 14:11:25 | Event 4625 | Failed Login | User: testuser | IP: 192.168.1.100
+2026-09-05 14:10:44 | Event 4625 | Failed Login | User: testuser | IP: 192.168.1.100
+2026-09-05 14:10:01 | Event 4625 | Failed Login | User: testuser | IP: 192.168.1.100

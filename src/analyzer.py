@@ -1,8 +1,7 @@
 from datetime import timedelta
 
 
-def analyze_events(events):
-
+def analyze_events(events, threshold=5, window_minutes=5):
     summary = {
         "successful_logins": 0,
         "failed_logins": 0,
@@ -17,12 +16,9 @@ def analyze_events(events):
     failed_attempts = []
 
     for event in events:
-
         event_id = event["event_id"]
 
-        # Successful login
         if event_id == 4624:
-
             summary["successful_logins"] += 1
 
             logon_type = event.get(
@@ -45,19 +41,17 @@ def analyze_events(events):
             else:
                 summary["other_logins"] += 1
 
-        # Failed login
         elif event_id == 4625:
-
             summary["failed_logins"] += 1
             failed_attempts.append(event)
 
-        # Logoff
         elif event_id in (4634, 4647):
-
             summary["logoffs"] += 1
 
     alerts = detect_brute_force(
-        failed_attempts
+        failed_attempts,
+        threshold=threshold,
+        window_minutes=window_minutes
     )
 
     return summary, alerts
@@ -68,14 +62,11 @@ def detect_brute_force(
     threshold=5,
     window_minutes=5
 ):
-
     alerts = []
 
     grouped = {}
 
-    # Group failed attempts by user + IP
     for event in failed_events:
-
         user = event.get(
             "user",
             "Unknown"
@@ -96,7 +87,6 @@ def detect_brute_force(
 
         grouped[key].append(event)
 
-    # Analyze each group
     for (user, ip), events in grouped.items():
 
         events.sort(
@@ -110,7 +100,10 @@ def detect_brute_force(
             count = 1
             last_index = i
 
-            for j in range(i + 1, len(events)):
+            for j in range(
+                i + 1,
+                len(events)
+            ):
 
                 difference = (
                     events[j]["time"]
@@ -120,25 +113,25 @@ def detect_brute_force(
                 if difference <= timedelta(
                     minutes=window_minutes
                 ):
-
                     count += 1
                     last_index = j
-
                 else:
                     break
 
             if count >= threshold:
 
-                alerts.append({
-                    "type": "Possible Brute Force",
-                    "user": user,
-                    "ip": ip,
-                    "attempts": count,
-                    "window_minutes": window_minutes,
-                    "risk": "HIGH",
-                    "first_seen": start_time,
-                    "last_seen": events[last_index]["time"],
-                })
+                alerts.append(
+                    {
+                        "type": "Possible Brute Force",
+                        "user": user,
+                        "ip": ip,
+                        "attempts": count,
+                        "window_minutes": window_minutes,
+                        "risk": "HIGH",
+                        "first_seen": start_time,
+                        "last_seen": events[last_index]["time"],
+                    }
+                )
 
                 break
 

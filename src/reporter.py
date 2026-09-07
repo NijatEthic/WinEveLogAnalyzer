@@ -1,4 +1,5 @@
 from pathlib import Path
+import json
 
 
 REPORT_DIR = (
@@ -162,3 +163,41 @@ def generate_report(summary, alerts, events):
             )
 
     return report_file
+
+
+def generate_json_report(
+    summary,
+    alerts,
+    events
+):
+
+    REPORT_DIR.mkdir(
+        exist_ok=True
+    )
+
+    json_file = (
+        REPORT_DIR
+        / "security_report.json"
+    )
+
+    json_data = {
+        "summary": summary,
+        "alerts": alerts,
+        "recent_events": events[:50]
+    }
+
+    with open(
+        json_file,
+        "w",
+        encoding="utf-8"
+    ) as file:
+
+        json.dump(
+            json_data,
+            file,
+            indent=4,
+            ensure_ascii=False,
+            default=str
+        )
+
+    return json_file
